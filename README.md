@@ -13,6 +13,7 @@ At this point I am not expecting others to use it.
 After installing dependencies (sdl2, opencv 3, and rtmidi):
 
 ```
+$ touch *
 $ ./configure
 $ make 
 $ make install
@@ -23,7 +24,7 @@ $ make install
 This project is developed and run on MacOS, but in setting up to work with Travis it had to also at least compile on Ubuntu:
 
 ```
-$ sudo apt-get install -y librtmidi-dev libsdl2-dev
+$ sudo apt-get install -y librtmidi-dev libsdl2-dev libboost-all-dev
 ```
 
 Installing opencv >= 3.4.1 is an exercise left to the reader.

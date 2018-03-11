@@ -86,6 +86,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+build_triplet = @build@
+host_triplet = @host@
 bin_PROGRAMS = syntheffect$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -176,7 +178,7 @@ CTAGS = ctags
 CSCOPE = cscope
 AM_RECURSIVE_TARGETS = cscope
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in compile \
-	depcomp install-sh missing
+	config.guess config.sub depcomp install-sh missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -201,6 +203,8 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BOOST_CPPFLAGS = @BOOST_CPPFLAGS@
+BOOST_LDFLAGS = @BOOST_LDFLAGS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -218,6 +222,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 GREP = @GREP@
+HAVE_CXX11 = @HAVE_CXX11@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -265,14 +270,22 @@ am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
 bindir = @bindir@
+build = @build@
 build_alias = @build_alias@
+build_cpu = @build_cpu@
+build_os = @build_os@
+build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+host = @host@
 host_alias = @host_alias@
+host_cpu = @host_cpu@
+host_os = @host_os@
+host_vendor = @host_vendor@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
@@ -306,8 +319,8 @@ syntheffect_SOURCES = \
 		    src/synth/cat_explorer_synth.cc \
 		    src/synth.cc
 
-syntheffect_CPPFLAGS = $(RTMIDI_CFLAGS) $(OPENCV_CFLAGS) $(SDL_CFLAGS) -I$(top_srcdir)/include
-syntheffect_LDFLAGS = $(RTMIDI_LIBS) $(OPENCV_LIBS) $(SDL_LIBS)
+syntheffect_CPPFLAGS = $(RTMIDI_CFLAGS) $(BOOST_CPPFLAGS) $(OPENCV_CFLAGS) $(SDL_CFLAGS) -I$(top_srcdir)/include
+syntheffect_LDFLAGS = $(RTMIDI_LIBS) $(BOOST_LDFLAGS) $(OPENCV_LIBS) $(SDL_LIBS)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 

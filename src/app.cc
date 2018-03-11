@@ -1,4 +1,4 @@
-        modified:   src/app.cc#include "syntheffect/app.h"
+#include "syntheffect/app.h"
 
 #include <math.h>
 #include <iostream>

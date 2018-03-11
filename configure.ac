@@ -11,10 +11,14 @@ AC_PROG_AWK
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 
+# Specify C++11
+AX_CXX_COMPILE_STDCXX_11
+
 # Checks for libraries.
 PKG_CHECK_MODULES(RTMIDI, rtmidi >= 2.0.1)
-AM_PATH_SDL2(2.0.8)
+AM_PATH_SDL2(2.0.2)
 PKG_CHECK_MODULES(OPENCV, opencv >= 3.4.1)
+AX_BOOST_BASE
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CHECK_HEADER_STDBOOL
