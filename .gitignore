@@ -1,0 +1,26 @@
+# Build artificats
+*.o
+*.o.dSYM
+*.o
+
+# Home for saved output during experimentation
+/art/*
+
+# Binary
+/syntheffect
+
+# Media files
+*.mkv
+*.mp4
+*.mov
+
+# Build files
+/Makefile
+.deps
+/autoscan.log
+/autom4te.cache/
+/config.h
+/config.log
+/config.status
+/stamp-h1
+.dirstamp
