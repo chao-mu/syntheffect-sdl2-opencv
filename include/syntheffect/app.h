@@ -1,63 +1,69 @@
 #ifndef SYNTHEFFECT_APP_H
 #define SYNTHEFFECT_APP_H
 
+#include "RtMidi.h"
 #include <SDL.h>
 #include <opencv2/videoio.hpp>
 #include <vector>
 
-#include "syntheffect/module/history_explorer.h"
-#include "syntheffect/module/cat_explorer.h"
-#include "syntheffect/module/derivative.h"
-#include "syntheffect/module/color_tweak.h"
 #include "syntheffect/module/writer.h"
 #include "syntheffect/midi.h"
+#include "syntheffect/synth/cmd_micro.h"
 
 namespace syntheffect {
-    enum AppState {
-        APP_STATE_CAT_EXPLORER_ACTIVE,
-        APP_STATE_DERIVATIVE_ACTIVE
-    };
-
     class App {
         public:
-            int setup(int argc, char **argv);
+            App(cv::VideoCapture& vcap, cv::VideoCapture& vcap_secondary, SDL_Window* window);
+            void loop(RtMidiIn* midi_in);
+
+        private:
             void close();
             void update();
             void stop();
-            bool stopped;
-            void handleEvent(SDL_Event event);
-            void handleMidiEvent(MidiMessage& msg);
 
-        private:
-            void handleCatExplorerActive(MidiMessage& msg);
+            void handleEvent(SDL_Event event);
+            void handleMidiEvent(MidiMessage msg);
 
             //The window we'll be rendering to
-            SDL_Window* window;
+            SDL_Window* window_;
 
             //The surface contained by the window
-            SDL_Surface* screenSurface;
+            SDL_Surface* screen_surface_;
+
+            // The surface onto which we'll display our frame
+            SDL_Surface* frame_surface_;
 
             //The image we will load and show on the screen
-            SDL_Surface* frameSurface;
 
-            cv::VideoCapture vcap;
+            // Whether or not we should exit the main loop.
+            bool stopped_;
 
-            unsigned int msDelay;
-            unsigned int lastUpdate;
-            int vidWidth;
-            int vidHeight;
+            // The video we're reading
+            cv::VideoCapture vcap_;
+
+            // The amount to wait between frames, at ideal maximum
+            unsigned int ms_delay_;
+
+            // The last time we drew a frame
+            unsigned int last_update_;
+
+            // Whether or not we should read the next frame.
             bool isNextFrameReady();
+
+            // snapshot takes a picture and writes it to an external file.
             void snapshot();
 
-            module::HistoryExplorer* historical_;
-            module::Derivative* derivative_;
-            module::CatExplorer* cats_;
-            module::ColorTweak* color_tweak_;
+            // writer_ is a module for outputing a recording of the magic synth_ will create
             module::Writer* writer_;
 
-            unsigned int frameIdx;
+            // synth_ provides main effect processing and midi event handling.
+            synth::CmdMicro* synth_;
+
+            // frame_idx_ is the number of the current frame.
+            unsigned int frame_idx_;
+
+            // frame_ is the last read frame from our video.
             cv::Mat frame_; 
-            AppState current_state_;
     };
 };
 #endif

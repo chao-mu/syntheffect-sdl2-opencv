@@ -15,6 +15,6 @@ namespace syntheffect {
                 double fadeParam(double current, bool up, double step);
                 bool active_;
         };
-    };
-};
+    }
+}
 #endif

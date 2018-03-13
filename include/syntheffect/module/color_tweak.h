@@ -12,6 +12,6 @@ namespace syntheffect {
                 ColorTweak();
                 void update(const cv::Mat& in, cv::Mat& out);
         };
-    };
-};
+    }
+}
 #endif

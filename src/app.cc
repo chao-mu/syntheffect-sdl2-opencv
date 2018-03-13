@@ -10,118 +10,64 @@
 #include "syntheffect/midi.h"
 
 namespace syntheffect {
-    int App::setup(int argc, char **argv) {
-        if (argc != 3) {
-            printf("Usage: %s syntheffect <path to video> <path to cat related video>\n", argv[0]);
-            return 1;
-        }
-        const char* fileName = argv[1];
-        const char* fileNameCats = argv[2];
-
-        cv::VideoCapture vcapCats = cv::VideoCapture(fileNameCats);
-
-        vcap = cv::VideoCapture(fileName);
-        vidWidth = int(round(vcap.get(cv::CAP_PROP_FRAME_WIDTH)));
-        vidHeight = int(round(vcap.get(cv::CAP_PROP_FRAME_HEIGHT))); 
-        double fps = vcap.get(cv::CAP_PROP_FPS);
-        msDelay = int((1 / fps) * 1000);
-
-        if(SDL_Init(SDL_INIT_VIDEO) < 0) {
-            printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-            return 1;
-        }
-
-        //Create window
-        window = SDL_CreateWindow("syntheffect", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vidWidth, vidHeight, SDL_WINDOW_SHOWN);
-        if (window == NULL) {
-            printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-            return 1;
-        }
-
+    App::App(cv::VideoCapture& vcap, cv::VideoCapture& vcap_secondary, SDL_Window* window) {
         //Get window surface
-        screenSurface = SDL_GetWindowSurface(window);
+        screen_surface_ = SDL_GetWindowSurface(window);
+        
+        window_ = window;
 
-        lastUpdate = 0;
-        stopped = false;
-        frameIdx = 0;
+        last_update_ = 0;
+        stopped_ = false;
+        frame_idx_ = 0;
 
-        current_state_ = APP_STATE_DERIVATIVE_ACTIVE;
-        derivative_ = new module::Derivative();
-        historical_ = new module::HistoryExplorer();
-        cats_ = new module::CatExplorer(vcapCats);
-        color_tweak_ = new module::ColorTweak();
-        writer_ = new module::Writer("out.avi", vidWidth, vidHeight, fps);
+        frame_surface_ = NULL;
 
-        color_tweak_->start();
-        derivative_->start();
-        writer_->start();
+        vcap_ = vcap;
+        int vid_width = int(round(vcap.get(cv::CAP_PROP_FRAME_WIDTH)));
+        int vid_height = int(round(vcap.get(cv::CAP_PROP_FRAME_HEIGHT))); 
+        double fps = vcap.get(cv::CAP_PROP_FPS);
+        ms_delay_ = int((1 / fps) * 1000);
 
-        return 0;
+        writer_ = new module::Writer("out.avi", vid_width, vid_height, fps);
+        synth_ = new synth::CmdMicro(vcap_secondary);
+    }
+
+    void App::loop(RtMidiIn* midi_in) {
+        std::vector<unsigned char> raw_message;
+        SDL_Event event;
+        while (true) {
+            update();
+            if (stopped_) {
+                break;
+            }
+
+            while (SDL_PollEvent(&event) != 0) {
+                handleEvent(event);
+            }
+            if (stopped_) {
+                break;
+            }
+
+            while (midi_in->getMessage(&raw_message) > 0) {
+                MidiMessage msg(raw_message);
+                synth_->handleMidiEvent(msg);
+            }
+            if (stopped_) {
+                break;
+            }
+        }
+
+        close();
     }
 
     void App::stop() {
-        stopped = true;
+        stopped_ = true;
     }
 
     void App::snapshot() {
-        std::string filename = boost::str(boost::format("out-%d.jpg") % frameIdx);
+        std::string filename = boost::str(boost::format("out-%d.jpg") % frame_idx_);
         cv::imwrite(filename, frame_);
     }
-
-    void App::handleCatExplorerActive(MidiMessage& msg) {
-        switch(msg.getType()) {
-            case MIDI_TYPE_NOTE_ON:
-                switch (msg.getNote()) {
-                    // Play/pause
-                    case 23:
-                        cats_->toggle();
-                        return;
-                    default:
-                        return;
-                }
-            case MIDI_TYPE_CONTROL:
-                switch (msg.getFunction()) {
-                    // Left turn table
-                    case 17:
-                        cats_->fadeWeight(msg.getValue() > 64);
-                        return;
-                    // Right turn table
-                    case 33:
-                        cats_->seek(msg.getValue() > 64 ? 5 : -5);
-                        return;
-                    default:
-                        return;
-                }
-            default:
-                return;
-        }
-    }
-
-    void App::handleMidiEvent(MidiMessage& msg) {
-        switch(msg.getType()) {
-            case MIDI_TYPE_NOTE_ON:
-                switch (msg.getNote()) {
-                    case 18:
-                        current_state_ = APP_STATE_DERIVATIVE_ACTIVE;
-                        return;
-                    case 19:
-                        current_state_ = APP_STATE_CAT_EXPLORER_ACTIVE;
-                        return;
-                    default:
-                        break;
-                }
-            default:
-                break;
-        }
-
-        switch(current_state_) {
-            case APP_STATE_CAT_EXPLORER_ACTIVE:
-                handleCatExplorerActive(msg);
-                return;
-            default:
-                break;
-        }
-    } 
 
     void App::handleEvent(SDL_Event event) {
         switch(event.type) {
@@ -133,51 +79,41 @@ namespace syntheffect {
                     case SDLK_s:
                         snapshot();
                         return;
-                    case SDLK_h:
-                        cats_->start();
-                        return;
-                }
-            case SDL_KEYUP:
-                switch(event.key.keysym.sym) {
-                    case SDLK_h:
-                        cats_->stop();
-                        return;
                 }
         }
     }
 
     bool App::isNextFrameReady() {
-        unsigned int transpired = SDL_GetTicks() - lastUpdate;
-        if (transpired > msDelay) {
-            SDL_Log("transpired=%u, msDelay=%u", transpired, msDelay);
+        unsigned int transpired = SDL_GetTicks() - last_update_;
+        if (transpired > ms_delay_) {
+            SDL_Log("transpired=%u, ms_delay_=%u", transpired, ms_delay_);
         }
-        return lastUpdate == 0 || transpired >= msDelay;
+        return last_update_ == 0 || transpired >= ms_delay_;
     }
 
     void App::update() {
         if (isNextFrameReady()) {
-            lastUpdate = SDL_GetTicks();
+            last_update_ = SDL_GetTicks();
 
-            bool readSuccess = vcap.read(frame_);
-            if (!readSuccess) {
+            bool read_success = vcap_.read(frame_);
+            if (!read_success) {
                 SDL_Log("Video finished");
                 stop();
                 return;
             }
 
-            if (frameSurface != NULL) {
-                SDL_FreeSurface(frameSurface);
+            if (frame_surface_ != NULL) {
+                SDL_FreeSurface(frame_surface_);
             }
 
-            frameIdx++;
+            frame_idx_++;
 
             //historical_->update(frame, frame);
             //cats_->update(frame, frame);
-            color_tweak_->update(frame_, frame_);
-            derivative_->update(frame_, frame_);
+            synth_->update(frame_, frame_);
             writer_->update(frame_, frame_);
 
-            frameSurface = SDL_CreateRGBSurfaceFrom(
+            frame_surface_ = SDL_CreateRGBSurfaceFrom(
                     frame_.data,
                     frame_.cols,
                     frame_.rows,
@@ -185,37 +121,37 @@ namespace syntheffect {
                     frame_.cols * 3,
                     0xff0000, 0x00ff00, 0x0000ff, 0);
 
-            if (frameSurface == NULL) {
+            if (frame_surface_ == NULL) {
                 SDL_Log("Couldn't convert Mat to Surface. %s\n", SDL_GetError());
             }
 
             // Calculate upper left of middle of the scrreen
             SDL_Rect targetRect;
-            double xcenter = screenSurface->w / 2;
-            double ycenter = screenSurface->h / 2; 
-            targetRect.w = frameSurface->w;
-            targetRect.h = frameSurface->h;
-            targetRect.x = int(round(xcenter - (frameSurface->w/2)));
-            targetRect.y = int(round(ycenter - (frameSurface->h/2)));
+            double xcenter = screen_surface_->w / 2;
+            double ycenter = screen_surface_->h / 2; 
+            targetRect.w = frame_surface_->w;
+            targetRect.h = frame_surface_->h;
+            targetRect.x = int(round(xcenter - (frame_surface_->w/2)));
+            targetRect.y = int(round(ycenter - (frame_surface_->h/2)));
 
-            SDL_BlitSurface(frameSurface, NULL, screenSurface, &targetRect);
+            SDL_BlitSurface(frame_surface_, NULL, screen_surface_, &targetRect);
 
-            SDL_UpdateWindowSurface(window);
+            SDL_UpdateWindowSurface(window_);
         }
     }
 
     void App::close() {
-        if (frameSurface != NULL) {
-            SDL_FreeSurface(frameSurface);
+        if (frame_surface_ != NULL) {
+            SDL_FreeSurface(frame_surface_);
         }
 
         //Destroy window
-        SDL_DestroyWindow(window);
+        SDL_DestroyWindow(window_);
 
         //Quit SDL subsystems
         SDL_Quit();
 
-        vcap.release();
+        vcap_.release();
         writer_->release();
     }
 };

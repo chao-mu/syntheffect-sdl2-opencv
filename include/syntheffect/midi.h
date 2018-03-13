@@ -23,5 +23,5 @@ namespace syntheffect {
         private:
             std::vector<unsigned char> rawMessage;
     };
-};
+}
 #endif

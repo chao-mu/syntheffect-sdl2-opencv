@@ -17,6 +17,6 @@ namespace syntheffect {
             private:
                 cv::Size blurSize;
         };
-    };
-};
+    }
+}
 #endif

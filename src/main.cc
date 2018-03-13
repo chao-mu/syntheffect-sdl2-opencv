@@ -8,49 +8,48 @@ const char* window_name = "window";
 
 int main(int argc, char **argv)
 {
-    syntheffect::App* myApp = new syntheffect::App();
-    int status = myApp->setup(argc, argv);
-    if (status != 0) {
-        return status;
+    if (argc != 3) {
+        printf("Usage: %s syntheffect <path to video> <path to cat related video>\n", argv[0]);
+        return 1;
     }
+    const char* filename = argv[1];
+    const char* filename_cats = argv[2];
+
+    cv::VideoCapture vcap_cats = cv::VideoCapture(filename_cats);
+
+    auto vcap = cv::VideoCapture(filename);
 
     // http://www.music.mcgill.ca/~gary/rtmidi/
-    RtMidiIn *midiin = new RtMidiIn();
+    RtMidiIn *midi_in = new RtMidiIn();
     // Check available ports.
-    unsigned int nPorts = midiin->getPortCount();
+    unsigned int nPorts = midi_in->getPortCount();
     if (nPorts == 0) {
 	std::cout << "No MIDI ports available!\n";
-	delete midiin;
+	delete midi_in;
 	return 1;
     }
-    midiin->openPort(0);
+    midi_in->openPort(0);
 
-    std::vector<unsigned char> rawMessage;
-    SDL_Event event;
-    while (true) {
-        myApp->update();
-        if (myApp->stopped) {
-            break;
-        }
 
-        while (SDL_PollEvent(&event) != 0) {
-            myApp->handleEvent(event);
-        }
-        if (myApp->stopped) {
-            break;
-        }
-
-	while (midiin->getMessage(&rawMessage) > 0) {
-            syntheffect::MidiMessage msg(rawMessage);
-            myApp->handleMidiEvent(msg);
-	}
-        if (myApp->stopped) {
-            break;
-        }
+    if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+        return 1;
     }
 
-    delete midiin;
-    myApp->close();
+    int vid_width = int(round(vcap.get(cv::CAP_PROP_FRAME_WIDTH)));
+    int vid_height = int(round(vcap.get(cv::CAP_PROP_FRAME_HEIGHT))); 
+
+    //Create window
+    SDL_Window* window = SDL_CreateWindow("syntheffect", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vid_width, vid_height, SDL_WINDOW_SHOWN);
+    if (window == NULL) {
+        printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    syntheffect::App* app = new syntheffect::App(vcap, vcap_cats, window);
+    app->loop(midi_in);
+
+    delete midi_in;
 
     return 0;
 }

@@ -25,6 +25,6 @@ namespace syntheffect {
                 uint32_t current_pos_frames_;
                 cv::VideoCapture vcap_;
         };
-    };
-};
+    }
+}
 #endif

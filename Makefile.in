@@ -112,7 +112,8 @@ am_syntheffect_OBJECTS = src/syntheffect-main.$(OBJEXT) \
 	src/module/syntheffect-cat_explorer.$(OBJEXT) \
 	src/module/syntheffect-color_tweak.$(OBJEXT) \
 	src/module/syntheffect-writer.$(OBJEXT) \
-	src/module/syntheffect-module.$(OBJEXT)
+	src/module/syntheffect-module.$(OBJEXT) \
+	src/synth/syntheffect-cmd_micro.$(OBJEXT)
 syntheffect_OBJECTS = $(am_syntheffect_OBJECTS)
 syntheffect_LDADD = $(LDADD)
 syntheffect_LINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
@@ -321,7 +322,8 @@ syntheffect_SOURCES = \
 		    src/module/cat_explorer.cc \
 		    src/module/color_tweak.cc \
 		    src/module/writer.cc \
-		    src/module/module.cc
+		    src/module/module.cc \
+		    src/synth/cmd_micro.cc
 
 syntheffect_CPPFLAGS = $(RTMIDI_CFLAGS) $(BOOST_CPPFLAGS) $(OPENCV_CFLAGS) $(SDL_CFLAGS) -I$(top_srcdir)/include
 syntheffect_LDFLAGS = $(RTMIDI_LIBS) $(BOOST_LDFLAGS) $(OPENCV_LIBS) $(SDL_LIBS)
@@ -454,6 +456,14 @@ src/module/syntheffect-writer.$(OBJEXT): src/module/$(am__dirstamp) \
 	src/module/$(DEPDIR)/$(am__dirstamp)
 src/module/syntheffect-module.$(OBJEXT): src/module/$(am__dirstamp) \
 	src/module/$(DEPDIR)/$(am__dirstamp)
+src/synth/$(am__dirstamp):
+	@$(MKDIR_P) src/synth
+	@: > src/synth/$(am__dirstamp)
+src/synth/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/synth/$(DEPDIR)
+	@: > src/synth/$(DEPDIR)/$(am__dirstamp)
+src/synth/syntheffect-cmd_micro.$(OBJEXT): src/synth/$(am__dirstamp) \
+	src/synth/$(DEPDIR)/$(am__dirstamp)
 
 syntheffect$(EXEEXT): $(syntheffect_OBJECTS) $(syntheffect_DEPENDENCIES) $(EXTRA_syntheffect_DEPENDENCIES) 
 	@rm -f syntheffect$(EXEEXT)
@@ -463,6 +473,7 @@ mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f src/*.$(OBJEXT)
 	-rm -f src/module/*.$(OBJEXT)
+	-rm -f src/synth/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -476,6 +487,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-history_explorer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-module.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-writer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/synth/$(DEPDIR)/syntheffect-cmd_micro.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -618,6 +630,20 @@ src/module/syntheffect-module.obj: src/module/module.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/module.cc' object='src/module/syntheffect-module.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-module.obj `if test -f 'src/module/module.cc'; then $(CYGPATH_W) 'src/module/module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/module.cc'; fi`
+
+src/synth/syntheffect-cmd_micro.o: src/synth/cmd_micro.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-cmd_micro.o -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-cmd_micro.Tpo -c -o src/synth/syntheffect-cmd_micro.o `test -f 'src/synth/cmd_micro.cc' || echo '$(srcdir)/'`src/synth/cmd_micro.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/synth/$(DEPDIR)/syntheffect-cmd_micro.Tpo src/synth/$(DEPDIR)/syntheffect-cmd_micro.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth/cmd_micro.cc' object='src/synth/syntheffect-cmd_micro.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/synth/syntheffect-cmd_micro.o `test -f 'src/synth/cmd_micro.cc' || echo '$(srcdir)/'`src/synth/cmd_micro.cc
+
+src/synth/syntheffect-cmd_micro.obj: src/synth/cmd_micro.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-cmd_micro.obj -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-cmd_micro.Tpo -c -o src/synth/syntheffect-cmd_micro.obj `if test -f 'src/synth/cmd_micro.cc'; then $(CYGPATH_W) 'src/synth/cmd_micro.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth/cmd_micro.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/synth/$(DEPDIR)/syntheffect-cmd_micro.Tpo src/synth/$(DEPDIR)/syntheffect-cmd_micro.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth/cmd_micro.cc' object='src/synth/syntheffect-cmd_micro.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/synth/syntheffect-cmd_micro.obj `if test -f 'src/synth/cmd_micro.cc'; then $(CYGPATH_W) 'src/synth/cmd_micro.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth/cmd_micro.cc'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -878,6 +904,8 @@ distclean-generic:
 	-rm -f src/$(am__dirstamp)
 	-rm -f src/module/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/module/$(am__dirstamp)
+	-rm -f src/synth/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/synth/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -888,7 +916,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf src/$(DEPDIR) src/module/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/module/$(DEPDIR) src/synth/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -936,7 +964,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf src/$(DEPDIR) src/module/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/module/$(DEPDIR) src/synth/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
