@@ -5,11 +5,11 @@
 #include <opencv2/videoio.hpp>
 #include <vector>
 
-#include "syntheffect/module/history_explorer_module.h"
-#include "syntheffect/module/cat_explorer_module.h"
-#include "syntheffect/module/derivative_module.h"
-#include "syntheffect/module/color_tweak_module.h"
-#include "syntheffect/module/writer_module.h"
+#include "syntheffect/module/history_explorer.h"
+#include "syntheffect/module/cat_explorer.h"
+#include "syntheffect/module/derivative.h"
+#include "syntheffect/module/color_tweak.h"
+#include "syntheffect/module/writer.h"
 #include "syntheffect/midi.h"
 
 namespace syntheffect {
@@ -49,11 +49,11 @@ namespace syntheffect {
             bool isNextFrameReady();
             void snapshot();
 
-            HistoryExplorerModule* historical_;
-            DerivativeModule* derivative_;
-            CatExplorerModule* cats_;
-            ColorTweakModule* color_tweak_;
-            WriterModule* writer_;
+            module::HistoryExplorer* historical_;
+            module::Derivative* derivative_;
+            module::CatExplorer* cats_;
+            module::ColorTweak* color_tweak_;
+            module::Writer* writer_;
 
             unsigned int frameIdx;
             cv::Mat frame_; 

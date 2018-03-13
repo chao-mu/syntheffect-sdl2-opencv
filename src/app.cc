@@ -46,11 +46,11 @@ namespace syntheffect {
         frameIdx = 0;
 
         current_state_ = APP_STATE_DERIVATIVE_ACTIVE;
-        derivative_ = new DerivativeModule();
-        historical_ = new HistoryExplorerModule();
-        cats_ = new CatExplorerModule(vcapCats);
-        color_tweak_ = new ColorTweakModule();
-        writer_ = new WriterModule("out.avi", vidWidth, vidHeight, fps);
+        derivative_ = new module::Derivative();
+        historical_ = new module::HistoryExplorer();
+        cats_ = new module::CatExplorer(vcapCats);
+        color_tweak_ = new module::ColorTweak();
+        writer_ = new module::Writer("out.avi", vidWidth, vidHeight, fps);
 
         color_tweak_->start();
         derivative_->start();
