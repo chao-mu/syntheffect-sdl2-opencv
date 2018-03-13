@@ -1,4 +1,4 @@
-#include "syntheffect/synth/cat_explorer_synth.h"
+#include "syntheffect/module/cat_explorer_module.h"
 
 #include <SDL.h>
 #include <opencv2/opencv.hpp>
@@ -7,24 +7,24 @@
 namespace syntheffect {
     // Maybe more performant with videos with b-frames
     // https://github.com/opencv/opencv/issues/4890
-    CatExplorerSynth::CatExplorerSynth(cv::VideoCapture& vcap) {
+    CatExplorerModule::CatExplorerModule(cv::VideoCapture& vcap) {
         weight_ = 0.5;
         current_pos_frames_ = 0;
         vcap_ = vcap;
         last_seek_ = -1;
     }
 
-    void CatExplorerSynth::setWeight(double param) {
+    void CatExplorerModule::setWeight(double param) {
         weight_ = param;
     }
 
-    void CatExplorerSynth::seek(uint32_t step_frames) {
+    void CatExplorerModule::seek(uint32_t step_frames) {
         uint32_t max_frames = vcap_.get(cv::CAP_PROP_FRAME_COUNT);
         current_pos_frames_ = (current_pos_frames_ + step_frames) % (max_frames + 1);
         last_seek_ = SDL_GetTicks();
     }
 
-    bool CatExplorerSynth::shouldSeek() {
+    bool CatExplorerModule::shouldSeek() {
         if (last_seek_ < 0) {
             return false;
         }
@@ -33,7 +33,7 @@ namespace syntheffect {
         return SDL_GetTicks() - last_seek_ < 200;
     }
 
-    void CatExplorerSynth::update(const cv::Mat& in, cv::Mat& out) {
+    void CatExplorerModule::update(const cv::Mat& in, cv::Mat& out) {
         if (active_) {
             cv::Mat frame;
             vcap_ >> frame;
@@ -54,19 +54,11 @@ namespace syntheffect {
         }
     }
 
-    void CatExplorerSynth::fadeWeight(bool up) {
+    void CatExplorerModule::fadeWeight(bool up) {
         weight_ = fadeParam(weight_, up, 0.05);
     }
 
-    void CatExplorerSynth::start() {
-        active_ = true;
-    }
-
-    void CatExplorerSynth::stop() {
-        active_ = false;
-    }
-
-    std::string CatExplorerSynth::stringify() {
-        return str(boost::format("CatExplorerSynth: weight=%1%") % weight_);
+    std::string CatExplorerModule::stringify() {
+        return str(boost::format("CatExplorerModule: weight=%1%") % weight_);
     }
 };

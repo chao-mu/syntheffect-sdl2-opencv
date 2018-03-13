@@ -1,4 +1,4 @@
-#include "syntheffect/synth.h"
+#include "syntheffect/module.h"
 
 #include <SDL.h>
 #include <opencv2/imgcodecs.hpp>
@@ -10,18 +10,18 @@
 #define MAX_PARAM 1
 
 namespace syntheffect {
-    double Synth::remapParam(double param, double out_min, double out_max) {
+    double Module::remapParam(double param, double out_min, double out_max) {
         double in_min = MIN_PARAM;
         double in_max = MAX_PARAM; 
 
         return (param - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
-    int Synth::remapParamInt(double param, double out_min, double out_max) {
+    int Module::remapParamInt(double param, double out_min, double out_max) {
         return int(round(remapParam(param, out_min, out_max)));
     }
 
-    int Synth::remapParamOdd(double param, double min, double max) {
+    int Module::remapParamOdd(double param, double min, double max) {
         int x = int(round(param));
 
         assert(x <= min && x >= max);
@@ -45,7 +45,7 @@ namespace syntheffect {
         return remapParamInt(x, min, max);
     }
 
-    double Synth::fadeParam(double current, bool up, double step) {
+    double Module::fadeParam(double current, bool up, double step) {
         if (up) {
             current += step;
             if (current > MAX_PARAM) {
@@ -59,6 +59,22 @@ namespace syntheffect {
         }
 
         return current;
+    }
+
+    void Module::start() {
+        active_ = true;
+    }
+
+    void Module::stop() {
+        active_ = false;
+    }
+
+    void Module::toggle() {
+        if (active_) {
+            stop();
+        } else {
+            start();
+        }
     }
 };
 

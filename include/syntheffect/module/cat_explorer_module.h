@@ -1,23 +1,23 @@
+#ifndef SYNTHEFFECT_MODULE_CAT_EXPLORER_MODULE_H
+#define SYNTHEFFECT_MODULE_CAT_EXPLORER_MODULE_H
+
 #include <opencv2/core/mat.hpp>
 #include <opencv2/videoio.hpp>
 
-#include "syntheffect/synth.h"
+#include "syntheffect/module.h"
 #include <cstdint>
 
 namespace syntheffect {
-    class CatExplorerSynth : Synth {
+    class CatExplorerModule : public Module {
         public:
-           CatExplorerSynth(cv::VideoCapture& vcap);
+           CatExplorerModule(cv::VideoCapture& vcap);
            void update(const cv::Mat& in, cv::Mat& out);
-           void start();
-           void stop();
            void setWeight(double param);
            void fadeWeight(bool up);
            void seek(uint32_t step_frames);
            std::string stringify();
 
         private:
-           bool active_;
            bool shouldSeek();
            int64_t last_seek_;
            double weight_;
@@ -25,3 +25,4 @@ namespace syntheffect {
            cv::VideoCapture vcap_;
     };
 };
+#endif

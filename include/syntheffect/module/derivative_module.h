@@ -1,13 +1,14 @@
+#ifndef SYNTHEFFECT_MODULE_DERIVATIVE_MODULE
+#define SYNTHEFFECT_MODULE_DERIVATIVE_MODULE
+
 #include <opencv2/core/mat.hpp>
 
-#include "syntheffect/synth.h"
+#include "syntheffect/module.h"
 
-#ifndef SYNTHEFFECT_SYNTH_DERIVATIVE_SYNTH
-#define SYNTHEFFECT_SYNTH_DERIVATIVE_SYNTH
 namespace syntheffect {
-    class DerivativeSynth : Synth {
+    class DerivativeModule : public Module {
         public:
-           DerivativeSynth();
+           DerivativeModule();
            void update(const cv::Mat& in, cv::Mat& out);
            void setBlurSize(double param);
            std::string stringify();

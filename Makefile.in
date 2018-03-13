@@ -107,10 +107,12 @@ PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_syntheffect_OBJECTS = src/syntheffect-main.$(OBJEXT) \
 	src/syntheffect-midi.$(OBJEXT) src/syntheffect-app.$(OBJEXT) \
-	src/synth/syntheffect-history_explorer_synth.$(OBJEXT) \
-	src/synth/syntheffect-derivative_synth.$(OBJEXT) \
-	src/synth/syntheffect-cat_explorer_synth.$(OBJEXT) \
-	src/syntheffect-synth.$(OBJEXT)
+	src/module/syntheffect-history_explorer_module.$(OBJEXT) \
+	src/module/syntheffect-derivative_module.$(OBJEXT) \
+	src/module/syntheffect-cat_explorer_module.$(OBJEXT) \
+	src/module/syntheffect-color_tweak_module.$(OBJEXT) \
+	src/module/syntheffect-writer_module.$(OBJEXT) \
+	src/syntheffect-module.$(OBJEXT)
 syntheffect_OBJECTS = $(am_syntheffect_OBJECTS)
 syntheffect_LDADD = $(LDADD)
 syntheffect_LINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
@@ -314,10 +316,12 @@ syntheffect_SOURCES = \
 		    src/main.cc \
 		    src/midi.cc \
 		    src/app.cc \
-		    src/synth/history_explorer_synth.cc \
-		    src/synth/derivative_synth.cc \
-		    src/synth/cat_explorer_synth.cc \
-		    src/synth.cc
+		    src/module/history_explorer_module.cc \
+		    src/module/derivative_module.cc \
+		    src/module/cat_explorer_module.cc \
+		    src/module/color_tweak_module.cc \
+		    src/module/writer_module.cc \
+		    src/module.cc
 
 syntheffect_CPPFLAGS = $(RTMIDI_CFLAGS) $(BOOST_CPPFLAGS) $(OPENCV_CFLAGS) $(SDL_CFLAGS) -I$(top_srcdir)/include
 syntheffect_LDFLAGS = $(RTMIDI_LIBS) $(BOOST_LDFLAGS) $(OPENCV_LIBS) $(SDL_LIBS)
@@ -428,19 +432,28 @@ src/syntheffect-midi.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/syntheffect-app.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/synth/$(am__dirstamp):
-	@$(MKDIR_P) src/synth
-	@: > src/synth/$(am__dirstamp)
-src/synth/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) src/synth/$(DEPDIR)
-	@: > src/synth/$(DEPDIR)/$(am__dirstamp)
-src/synth/syntheffect-history_explorer_synth.$(OBJEXT):  \
-	src/synth/$(am__dirstamp) src/synth/$(DEPDIR)/$(am__dirstamp)
-src/synth/syntheffect-derivative_synth.$(OBJEXT):  \
-	src/synth/$(am__dirstamp) src/synth/$(DEPDIR)/$(am__dirstamp)
-src/synth/syntheffect-cat_explorer_synth.$(OBJEXT):  \
-	src/synth/$(am__dirstamp) src/synth/$(DEPDIR)/$(am__dirstamp)
-src/syntheffect-synth.$(OBJEXT): src/$(am__dirstamp) \
+src/module/$(am__dirstamp):
+	@$(MKDIR_P) src/module
+	@: > src/module/$(am__dirstamp)
+src/module/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/module/$(DEPDIR)
+	@: > src/module/$(DEPDIR)/$(am__dirstamp)
+src/module/syntheffect-history_explorer_module.$(OBJEXT):  \
+	src/module/$(am__dirstamp) \
+	src/module/$(DEPDIR)/$(am__dirstamp)
+src/module/syntheffect-derivative_module.$(OBJEXT):  \
+	src/module/$(am__dirstamp) \
+	src/module/$(DEPDIR)/$(am__dirstamp)
+src/module/syntheffect-cat_explorer_module.$(OBJEXT):  \
+	src/module/$(am__dirstamp) \
+	src/module/$(DEPDIR)/$(am__dirstamp)
+src/module/syntheffect-color_tweak_module.$(OBJEXT):  \
+	src/module/$(am__dirstamp) \
+	src/module/$(DEPDIR)/$(am__dirstamp)
+src/module/syntheffect-writer_module.$(OBJEXT):  \
+	src/module/$(am__dirstamp) \
+	src/module/$(DEPDIR)/$(am__dirstamp)
+src/syntheffect-module.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 
 syntheffect$(EXEEXT): $(syntheffect_OBJECTS) $(syntheffect_DEPENDENCIES) $(EXTRA_syntheffect_DEPENDENCIES) 
@@ -450,7 +463,7 @@ syntheffect$(EXEEXT): $(syntheffect_OBJECTS) $(syntheffect_DEPENDENCIES) $(EXTRA
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f src/*.$(OBJEXT)
-	-rm -f src/synth/*.$(OBJEXT)
+	-rm -f src/module/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -458,10 +471,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/syntheffect-app.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/syntheffect-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/syntheffect-midi.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/syntheffect-synth.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/synth/$(DEPDIR)/syntheffect-cat_explorer_synth.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/synth/$(DEPDIR)/syntheffect-derivative_synth.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/synth/$(DEPDIR)/syntheffect-history_explorer_synth.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/syntheffect-module.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-cat_explorer_module.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-color_tweak_module.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-derivative_module.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-history_explorer_module.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-writer_module.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -521,61 +536,89 @@ src/syntheffect-app.obj: src/app.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/syntheffect-app.obj `if test -f 'src/app.cc'; then $(CYGPATH_W) 'src/app.cc'; else $(CYGPATH_W) '$(srcdir)/src/app.cc'; fi`
 
-src/synth/syntheffect-history_explorer_synth.o: src/synth/history_explorer_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-history_explorer_synth.o -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-history_explorer_synth.Tpo -c -o src/synth/syntheffect-history_explorer_synth.o `test -f 'src/synth/history_explorer_synth.cc' || echo '$(srcdir)/'`src/synth/history_explorer_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/synth/$(DEPDIR)/syntheffect-history_explorer_synth.Tpo src/synth/$(DEPDIR)/syntheffect-history_explorer_synth.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth/history_explorer_synth.cc' object='src/synth/syntheffect-history_explorer_synth.o' libtool=no @AMDEPBACKSLASH@
+src/module/syntheffect-history_explorer_module.o: src/module/history_explorer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-history_explorer_module.o -MD -MP -MF src/module/$(DEPDIR)/syntheffect-history_explorer_module.Tpo -c -o src/module/syntheffect-history_explorer_module.o `test -f 'src/module/history_explorer_module.cc' || echo '$(srcdir)/'`src/module/history_explorer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-history_explorer_module.Tpo src/module/$(DEPDIR)/syntheffect-history_explorer_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/history_explorer_module.cc' object='src/module/syntheffect-history_explorer_module.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/synth/syntheffect-history_explorer_synth.o `test -f 'src/synth/history_explorer_synth.cc' || echo '$(srcdir)/'`src/synth/history_explorer_synth.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-history_explorer_module.o `test -f 'src/module/history_explorer_module.cc' || echo '$(srcdir)/'`src/module/history_explorer_module.cc
 
-src/synth/syntheffect-history_explorer_synth.obj: src/synth/history_explorer_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-history_explorer_synth.obj -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-history_explorer_synth.Tpo -c -o src/synth/syntheffect-history_explorer_synth.obj `if test -f 'src/synth/history_explorer_synth.cc'; then $(CYGPATH_W) 'src/synth/history_explorer_synth.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth/history_explorer_synth.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/synth/$(DEPDIR)/syntheffect-history_explorer_synth.Tpo src/synth/$(DEPDIR)/syntheffect-history_explorer_synth.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth/history_explorer_synth.cc' object='src/synth/syntheffect-history_explorer_synth.obj' libtool=no @AMDEPBACKSLASH@
+src/module/syntheffect-history_explorer_module.obj: src/module/history_explorer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-history_explorer_module.obj -MD -MP -MF src/module/$(DEPDIR)/syntheffect-history_explorer_module.Tpo -c -o src/module/syntheffect-history_explorer_module.obj `if test -f 'src/module/history_explorer_module.cc'; then $(CYGPATH_W) 'src/module/history_explorer_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/history_explorer_module.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-history_explorer_module.Tpo src/module/$(DEPDIR)/syntheffect-history_explorer_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/history_explorer_module.cc' object='src/module/syntheffect-history_explorer_module.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/synth/syntheffect-history_explorer_synth.obj `if test -f 'src/synth/history_explorer_synth.cc'; then $(CYGPATH_W) 'src/synth/history_explorer_synth.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth/history_explorer_synth.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-history_explorer_module.obj `if test -f 'src/module/history_explorer_module.cc'; then $(CYGPATH_W) 'src/module/history_explorer_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/history_explorer_module.cc'; fi`
 
-src/synth/syntheffect-derivative_synth.o: src/synth/derivative_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-derivative_synth.o -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-derivative_synth.Tpo -c -o src/synth/syntheffect-derivative_synth.o `test -f 'src/synth/derivative_synth.cc' || echo '$(srcdir)/'`src/synth/derivative_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/synth/$(DEPDIR)/syntheffect-derivative_synth.Tpo src/synth/$(DEPDIR)/syntheffect-derivative_synth.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth/derivative_synth.cc' object='src/synth/syntheffect-derivative_synth.o' libtool=no @AMDEPBACKSLASH@
+src/module/syntheffect-derivative_module.o: src/module/derivative_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-derivative_module.o -MD -MP -MF src/module/$(DEPDIR)/syntheffect-derivative_module.Tpo -c -o src/module/syntheffect-derivative_module.o `test -f 'src/module/derivative_module.cc' || echo '$(srcdir)/'`src/module/derivative_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-derivative_module.Tpo src/module/$(DEPDIR)/syntheffect-derivative_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/derivative_module.cc' object='src/module/syntheffect-derivative_module.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/synth/syntheffect-derivative_synth.o `test -f 'src/synth/derivative_synth.cc' || echo '$(srcdir)/'`src/synth/derivative_synth.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-derivative_module.o `test -f 'src/module/derivative_module.cc' || echo '$(srcdir)/'`src/module/derivative_module.cc
 
-src/synth/syntheffect-derivative_synth.obj: src/synth/derivative_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-derivative_synth.obj -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-derivative_synth.Tpo -c -o src/synth/syntheffect-derivative_synth.obj `if test -f 'src/synth/derivative_synth.cc'; then $(CYGPATH_W) 'src/synth/derivative_synth.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth/derivative_synth.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/synth/$(DEPDIR)/syntheffect-derivative_synth.Tpo src/synth/$(DEPDIR)/syntheffect-derivative_synth.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth/derivative_synth.cc' object='src/synth/syntheffect-derivative_synth.obj' libtool=no @AMDEPBACKSLASH@
+src/module/syntheffect-derivative_module.obj: src/module/derivative_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-derivative_module.obj -MD -MP -MF src/module/$(DEPDIR)/syntheffect-derivative_module.Tpo -c -o src/module/syntheffect-derivative_module.obj `if test -f 'src/module/derivative_module.cc'; then $(CYGPATH_W) 'src/module/derivative_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/derivative_module.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-derivative_module.Tpo src/module/$(DEPDIR)/syntheffect-derivative_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/derivative_module.cc' object='src/module/syntheffect-derivative_module.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/synth/syntheffect-derivative_synth.obj `if test -f 'src/synth/derivative_synth.cc'; then $(CYGPATH_W) 'src/synth/derivative_synth.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth/derivative_synth.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-derivative_module.obj `if test -f 'src/module/derivative_module.cc'; then $(CYGPATH_W) 'src/module/derivative_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/derivative_module.cc'; fi`
 
-src/synth/syntheffect-cat_explorer_synth.o: src/synth/cat_explorer_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-cat_explorer_synth.o -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-cat_explorer_synth.Tpo -c -o src/synth/syntheffect-cat_explorer_synth.o `test -f 'src/synth/cat_explorer_synth.cc' || echo '$(srcdir)/'`src/synth/cat_explorer_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/synth/$(DEPDIR)/syntheffect-cat_explorer_synth.Tpo src/synth/$(DEPDIR)/syntheffect-cat_explorer_synth.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth/cat_explorer_synth.cc' object='src/synth/syntheffect-cat_explorer_synth.o' libtool=no @AMDEPBACKSLASH@
+src/module/syntheffect-cat_explorer_module.o: src/module/cat_explorer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-cat_explorer_module.o -MD -MP -MF src/module/$(DEPDIR)/syntheffect-cat_explorer_module.Tpo -c -o src/module/syntheffect-cat_explorer_module.o `test -f 'src/module/cat_explorer_module.cc' || echo '$(srcdir)/'`src/module/cat_explorer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-cat_explorer_module.Tpo src/module/$(DEPDIR)/syntheffect-cat_explorer_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/cat_explorer_module.cc' object='src/module/syntheffect-cat_explorer_module.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/synth/syntheffect-cat_explorer_synth.o `test -f 'src/synth/cat_explorer_synth.cc' || echo '$(srcdir)/'`src/synth/cat_explorer_synth.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-cat_explorer_module.o `test -f 'src/module/cat_explorer_module.cc' || echo '$(srcdir)/'`src/module/cat_explorer_module.cc
 
-src/synth/syntheffect-cat_explorer_synth.obj: src/synth/cat_explorer_synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-cat_explorer_synth.obj -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-cat_explorer_synth.Tpo -c -o src/synth/syntheffect-cat_explorer_synth.obj `if test -f 'src/synth/cat_explorer_synth.cc'; then $(CYGPATH_W) 'src/synth/cat_explorer_synth.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth/cat_explorer_synth.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/synth/$(DEPDIR)/syntheffect-cat_explorer_synth.Tpo src/synth/$(DEPDIR)/syntheffect-cat_explorer_synth.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth/cat_explorer_synth.cc' object='src/synth/syntheffect-cat_explorer_synth.obj' libtool=no @AMDEPBACKSLASH@
+src/module/syntheffect-cat_explorer_module.obj: src/module/cat_explorer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-cat_explorer_module.obj -MD -MP -MF src/module/$(DEPDIR)/syntheffect-cat_explorer_module.Tpo -c -o src/module/syntheffect-cat_explorer_module.obj `if test -f 'src/module/cat_explorer_module.cc'; then $(CYGPATH_W) 'src/module/cat_explorer_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/cat_explorer_module.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-cat_explorer_module.Tpo src/module/$(DEPDIR)/syntheffect-cat_explorer_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/cat_explorer_module.cc' object='src/module/syntheffect-cat_explorer_module.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/synth/syntheffect-cat_explorer_synth.obj `if test -f 'src/synth/cat_explorer_synth.cc'; then $(CYGPATH_W) 'src/synth/cat_explorer_synth.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth/cat_explorer_synth.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-cat_explorer_module.obj `if test -f 'src/module/cat_explorer_module.cc'; then $(CYGPATH_W) 'src/module/cat_explorer_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/cat_explorer_module.cc'; fi`
 
-src/syntheffect-synth.o: src/synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/syntheffect-synth.o -MD -MP -MF src/$(DEPDIR)/syntheffect-synth.Tpo -c -o src/syntheffect-synth.o `test -f 'src/synth.cc' || echo '$(srcdir)/'`src/synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/syntheffect-synth.Tpo src/$(DEPDIR)/syntheffect-synth.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth.cc' object='src/syntheffect-synth.o' libtool=no @AMDEPBACKSLASH@
+src/module/syntheffect-color_tweak_module.o: src/module/color_tweak_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-color_tweak_module.o -MD -MP -MF src/module/$(DEPDIR)/syntheffect-color_tweak_module.Tpo -c -o src/module/syntheffect-color_tweak_module.o `test -f 'src/module/color_tweak_module.cc' || echo '$(srcdir)/'`src/module/color_tweak_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-color_tweak_module.Tpo src/module/$(DEPDIR)/syntheffect-color_tweak_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/color_tweak_module.cc' object='src/module/syntheffect-color_tweak_module.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/syntheffect-synth.o `test -f 'src/synth.cc' || echo '$(srcdir)/'`src/synth.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-color_tweak_module.o `test -f 'src/module/color_tweak_module.cc' || echo '$(srcdir)/'`src/module/color_tweak_module.cc
 
-src/syntheffect-synth.obj: src/synth.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/syntheffect-synth.obj -MD -MP -MF src/$(DEPDIR)/syntheffect-synth.Tpo -c -o src/syntheffect-synth.obj `if test -f 'src/synth.cc'; then $(CYGPATH_W) 'src/synth.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/syntheffect-synth.Tpo src/$(DEPDIR)/syntheffect-synth.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/synth.cc' object='src/syntheffect-synth.obj' libtool=no @AMDEPBACKSLASH@
+src/module/syntheffect-color_tweak_module.obj: src/module/color_tweak_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-color_tweak_module.obj -MD -MP -MF src/module/$(DEPDIR)/syntheffect-color_tweak_module.Tpo -c -o src/module/syntheffect-color_tweak_module.obj `if test -f 'src/module/color_tweak_module.cc'; then $(CYGPATH_W) 'src/module/color_tweak_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/color_tweak_module.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-color_tweak_module.Tpo src/module/$(DEPDIR)/syntheffect-color_tweak_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/color_tweak_module.cc' object='src/module/syntheffect-color_tweak_module.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/syntheffect-synth.obj `if test -f 'src/synth.cc'; then $(CYGPATH_W) 'src/synth.cc'; else $(CYGPATH_W) '$(srcdir)/src/synth.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-color_tweak_module.obj `if test -f 'src/module/color_tweak_module.cc'; then $(CYGPATH_W) 'src/module/color_tweak_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/color_tweak_module.cc'; fi`
+
+src/module/syntheffect-writer_module.o: src/module/writer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-writer_module.o -MD -MP -MF src/module/$(DEPDIR)/syntheffect-writer_module.Tpo -c -o src/module/syntheffect-writer_module.o `test -f 'src/module/writer_module.cc' || echo '$(srcdir)/'`src/module/writer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-writer_module.Tpo src/module/$(DEPDIR)/syntheffect-writer_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/writer_module.cc' object='src/module/syntheffect-writer_module.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-writer_module.o `test -f 'src/module/writer_module.cc' || echo '$(srcdir)/'`src/module/writer_module.cc
+
+src/module/syntheffect-writer_module.obj: src/module/writer_module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-writer_module.obj -MD -MP -MF src/module/$(DEPDIR)/syntheffect-writer_module.Tpo -c -o src/module/syntheffect-writer_module.obj `if test -f 'src/module/writer_module.cc'; then $(CYGPATH_W) 'src/module/writer_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/writer_module.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-writer_module.Tpo src/module/$(DEPDIR)/syntheffect-writer_module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/writer_module.cc' object='src/module/syntheffect-writer_module.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-writer_module.obj `if test -f 'src/module/writer_module.cc'; then $(CYGPATH_W) 'src/module/writer_module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/writer_module.cc'; fi`
+
+src/syntheffect-module.o: src/module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/syntheffect-module.o -MD -MP -MF src/$(DEPDIR)/syntheffect-module.Tpo -c -o src/syntheffect-module.o `test -f 'src/module.cc' || echo '$(srcdir)/'`src/module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/syntheffect-module.Tpo src/$(DEPDIR)/syntheffect-module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module.cc' object='src/syntheffect-module.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/syntheffect-module.o `test -f 'src/module.cc' || echo '$(srcdir)/'`src/module.cc
+
+src/syntheffect-module.obj: src/module.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/syntheffect-module.obj -MD -MP -MF src/$(DEPDIR)/syntheffect-module.Tpo -c -o src/syntheffect-module.obj `if test -f 'src/module.cc'; then $(CYGPATH_W) 'src/module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/syntheffect-module.Tpo src/$(DEPDIR)/syntheffect-module.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module.cc' object='src/syntheffect-module.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/syntheffect-module.obj `if test -f 'src/module.cc'; then $(CYGPATH_W) 'src/module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module.cc'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -834,8 +877,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f src/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/$(am__dirstamp)
-	-rm -f src/synth/$(DEPDIR)/$(am__dirstamp)
-	-rm -f src/synth/$(am__dirstamp)
+	-rm -f src/module/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/module/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -846,7 +889,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf src/$(DEPDIR) src/synth/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/module/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -894,7 +937,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf src/$(DEPDIR) src/synth/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/module/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

@@ -1,11 +1,14 @@
+#ifndef SYNTHEFFECT_MODULE_HISTORY_EXPLORER_MODULE_H
+#define SYNTHEFFECT_MODULE_HISTORY_EXPLORER_MODULE_H
+
 #include <opencv2/core/mat.hpp>
 
-#include "syntheffect/synth.h"
+#include "syntheffect/module.h"
 
 namespace syntheffect {
-    class HistoryExplorerSynth : Synth {
+    class HistoryExplorerModule : Module {
         public:
-           HistoryExplorerSynth();
+           HistoryExplorerModule();
            void update(const cv::Mat& in, cv::Mat& out);
            void start();
            void stop();
@@ -20,3 +23,4 @@ namespace syntheffect {
            double history_weight_;
     };
 };
+#endif

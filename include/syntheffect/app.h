@@ -5,12 +5,19 @@
 #include <opencv2/videoio.hpp>
 #include <vector>
 
-#include "syntheffect/synth/history_explorer_synth.h"
-#include "syntheffect/synth/cat_explorer_synth.h"
-#include "syntheffect/synth/derivative_synth.h"
+#include "syntheffect/module/history_explorer_module.h"
+#include "syntheffect/module/cat_explorer_module.h"
+#include "syntheffect/module/derivative_module.h"
+#include "syntheffect/module/color_tweak_module.h"
+#include "syntheffect/module/writer_module.h"
 #include "syntheffect/midi.h"
 
 namespace syntheffect {
+    enum AppState {
+        APP_STATE_CAT_EXPLORER_ACTIVE,
+        APP_STATE_DERIVATIVE_ACTIVE
+    };
+
     class App {
         public:
             int setup(int argc, char **argv);
@@ -22,6 +29,8 @@ namespace syntheffect {
             void handleMidiEvent(MidiMessage& msg);
 
         private:
+            void handleCatExplorerActive(MidiMessage& msg);
+
             //The window we'll be rendering to
             SDL_Window* window;
 
@@ -40,11 +49,15 @@ namespace syntheffect {
             bool isNextFrameReady();
             void snapshot();
 
-            DerivativeSynth* derivative_;
-            HistoryExplorerSynth* historical_;
-            CatExplorerSynth* cats_;
+            HistoryExplorerModule* historical_;
+            DerivativeModule* derivative_;
+            CatExplorerModule* cats_;
+            ColorTweakModule* color_tweak_;
+            WriterModule* writer_;
+
             unsigned int frameIdx;
-            cv::Mat frame; 
+            cv::Mat frame_; 
+            AppState current_state_;
     };
 };
 #endif

@@ -23,7 +23,8 @@ namespace syntheffect {
         vcap = cv::VideoCapture(fileName);
         vidWidth = int(round(vcap.get(cv::CAP_PROP_FRAME_WIDTH)));
         vidHeight = int(round(vcap.get(cv::CAP_PROP_FRAME_HEIGHT))); 
-        msDelay = int((1 / vcap.get(cv::CAP_PROP_FPS)) * 1000);
+        double fps = vcap.get(cv::CAP_PROP_FPS);
+        msDelay = int((1 / fps) * 1000);
 
         if(SDL_Init(SDL_INIT_VIDEO) < 0) {
             printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -31,7 +32,7 @@ namespace syntheffect {
         }
 
         //Create window
-        window = SDL_CreateWindow("SynthEffect", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vidWidth, vidHeight, SDL_WINDOW_SHOWN);
+        window = SDL_CreateWindow("syntheffect", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, vidWidth, vidHeight, SDL_WINDOW_SHOWN);
         if (window == NULL) {
             printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
             return 1;
@@ -44,10 +45,16 @@ namespace syntheffect {
         stopped = false;
         frameIdx = 0;
 
-        derivative_ = new DerivativeSynth();
-        historical_ = new HistoryExplorerSynth();
-        cats_ = new CatExplorerSynth(vcapCats);
+        current_state_ = APP_STATE_DERIVATIVE_ACTIVE;
+        derivative_ = new DerivativeModule();
+        historical_ = new HistoryExplorerModule();
+        cats_ = new CatExplorerModule(vcapCats);
+        color_tweak_ = new ColorTweakModule();
+        writer_ = new WriterModule("out.avi", vidWidth, vidHeight, fps);
 
+        color_tweak_->start();
+        derivative_->start();
+        writer_->start();
 
         return 0;
     }
@@ -58,46 +65,61 @@ namespace syntheffect {
 
     void App::snapshot() {
         std::string filename = boost::str(boost::format("out-%d.jpg") % frameIdx);
-        cv::imwrite(filename, frame);
+        cv::imwrite(filename, frame_);
+    }
+
+    void App::handleCatExplorerActive(MidiMessage& msg) {
+        switch(msg.getType()) {
+            case MIDI_TYPE_NOTE_ON:
+                switch (msg.getNote()) {
+                    // Play/pause
+                    case 23:
+                        cats_->toggle();
+                        return;
+                    default:
+                        return;
+                }
+            case MIDI_TYPE_CONTROL:
+                switch (msg.getFunction()) {
+                    // Left turn table
+                    case 17:
+                        cats_->fadeWeight(msg.getValue() > 64);
+                        return;
+                    // Right turn table
+                    case 33:
+                        cats_->seek(msg.getValue() > 64 ? 5 : -5);
+                        return;
+                    default:
+                        return;
+                }
+            default:
+                return;
+        }
     }
 
     void App::handleMidiEvent(MidiMessage& msg) {
         switch(msg.getType()) {
             case MIDI_TYPE_NOTE_ON:
-                SDL_Log("Note on! note=%d vel=%d", msg.getNote(), msg.getVelocity());
                 switch (msg.getNote()) {
-                    // Left turn table touch start
-                    case 1:
-                        cats_->setWeight(0.5);
-                        cats_->start();
+                    case 18:
+                        current_state_ = APP_STATE_DERIVATIVE_ACTIVE;
+                        return;
+                    case 19:
+                        current_state_ = APP_STATE_CAT_EXPLORER_ACTIVE;
+                        return;
                     default:
-                        return;
+                        break;
                 }
-            case MIDI_TYPE_NOTE_OFF:
-                switch (msg.getNote()) {
-                    // Left turn table touch stop
-                    case 1:
-                        cats_->stop();
-                    default:
-                        return;
-                }
-            case MIDI_TYPE_CONTROL:
-                switch (msg.getNote()) {
-                    // Left turn table
-                    case 17:
-                        cats_->fadeWeight(msg.getVelocity() > 64);
-                        return;
-                    // Right turn table
-                    case 33:
-                        cats_->seek(msg.getVelocity() > 64 ? 5 : -5);
-                        return;
-                }
+            default:
+                break;
+        }
 
-                SDL_Log("Control! %d, %d", msg.getFunction(), msg.getValue());
+        switch(current_state_) {
+            case APP_STATE_CAT_EXPLORER_ACTIVE:
+                handleCatExplorerActive(msg);
                 return;
-            case MIDI_TYPE_UNKNOWN:
-                SDL_Log("Midi unknown!");
-                return;
+            default:
+                break;
         }
     } 
 
@@ -136,7 +158,7 @@ namespace syntheffect {
         if (isNextFrameReady()) {
             lastUpdate = SDL_GetTicks();
 
-            bool readSuccess = vcap.read(frame);
+            bool readSuccess = vcap.read(frame_);
             if (!readSuccess) {
                 SDL_Log("Video finished");
                 stop();
@@ -150,15 +172,17 @@ namespace syntheffect {
             frameIdx++;
 
             //historical_->update(frame, frame);
-            cats_->update(frame, frame);
-            derivative_->update(frame, frame);
+            //cats_->update(frame, frame);
+            color_tweak_->update(frame_, frame_);
+            derivative_->update(frame_, frame_);
+            writer_->update(frame_, frame_);
 
             frameSurface = SDL_CreateRGBSurfaceFrom(
-                    frame.data,
-                    frame.cols,
-                    frame.rows,
+                    frame_.data,
+                    frame_.cols,
+                    frame_.rows,
                     24,
-                    frame.cols * 3,
+                    frame_.cols * 3,
                     0xff0000, 0x00ff00, 0x0000ff, 0);
 
             if (frameSurface == NULL) {
@@ -192,5 +216,6 @@ namespace syntheffect {
         SDL_Quit();
 
         vcap.release();
+        writer_->release();
     }
 };
