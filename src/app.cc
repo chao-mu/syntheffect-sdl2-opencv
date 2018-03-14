@@ -35,6 +35,7 @@ namespace syntheffect {
     void App::loop(RtMidiIn* midi_in) {
         std::vector<unsigned char> raw_message;
         SDL_Event event;
+
         while (true) {
             update();
             if (stopped_) {
@@ -126,15 +127,15 @@ namespace syntheffect {
             }
 
             // Calculate upper left of middle of the scrreen
-            SDL_Rect targetRect;
+            SDL_Rect target_rect;
             double xcenter = screen_surface_->w / 2;
             double ycenter = screen_surface_->h / 2; 
-            targetRect.w = frame_surface_->w;
-            targetRect.h = frame_surface_->h;
-            targetRect.x = int(round(xcenter - (frame_surface_->w/2)));
-            targetRect.y = int(round(ycenter - (frame_surface_->h/2)));
+            target_rect.w = frame_surface_->w;
+            target_rect.h = frame_surface_->h;
+            target_rect.x = int(round(xcenter - (frame_surface_->w/2)));
+            target_rect.y = int(round(ycenter - (frame_surface_->h/2)));
 
-            SDL_BlitSurface(frame_surface_, NULL, screen_surface_, &targetRect);
+            SDL_BlitSurface(frame_surface_, NULL, screen_surface_, &target_rect);
 
             SDL_UpdateWindowSurface(window_);
         }
