@@ -45,7 +45,7 @@ namespace syntheffect {
                 }
 
                 if (current_pos_frames_ > int(round(vcap_.get(cv::CAP_PROP_FRAME_COUNT)))) {
-                    current_pos_frames_ = 0;
+                    current_pos_frames_ = 1;
                 }
 
                 cv::resize(frame, frame, in.size(), 0, 0, cv::INTER_CUBIC);

@@ -19,12 +19,16 @@ namespace syntheffect {
 
             cv::cvtColor(in, out, cv::COLOR_BGR2HSV);
 
+            // The rolling offset to use to tinker with our pixels.
             uint32_t offset = SDL_GetTicks() / 10;
-            for (int row = 0; row < out.rows; row++) {
-                for (int col = 0; col < out.cols; col++) {
-                    out.at<uchar>(row, col, 0) = (out.at<uchar>(row, col, 0) + offset ) % 256;
-                    out.at<uchar>(row, col, 2) = (out.at<uchar>(row, col, 2) + (offset / 2)) % 256;
-                }
+           
+            // Iterate over each pixel
+            cv::MatIterator_<cv::Vec3b> it = out.begin<cv::Vec3b>();
+            cv::MatIterator_<cv::Vec3b> it_end = out.end<cv::Vec3b>();
+            for(; it != it_end; ++it) {
+                cv::Vec3b& pixel = *it; // reference to pixel in image
+                pixel[0] = (pixel[0] + offset) % 256;
+                pixel[2] = (pixel[2] + (offset/2)) % 256;
             }
 
             cv::cvtColor(out, out, cv::COLOR_HSV2BGR);
