@@ -10,10 +10,6 @@ namespace syntheffect {
             derivative_ = new module::Derivative();
             cats_ = new module::CatExplorer(second_vcap);
             color_tweak_ = new module::ColorTweak();
-
-            derivative_->start();
-            color_tweak_->start();
-            cats_->start();
         }
 
         void CmdMicro::handleCatExplorer(CmdMicroEvent event, uint8_t value) {
@@ -26,6 +22,16 @@ namespace syntheffect {
                     break;
                 case CMD_MICRO_RIGHT_TURN_TABLE_SPIN:
                     cats_->seek(value > 64 ? 2 : -2);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void CmdMicro::handleDerivative(CmdMicroEvent event, uint8_t value) {
+            switch(event) {
+                case CMD_MICRO_LEFT_PLAY_PAUSE:
+                    derivative_->toggle();
                     break;
                 default:
                     break;
@@ -57,6 +63,9 @@ namespace syntheffect {
                 case CMD_MICRO_STATE_CAT_EXPLORER:
                     handleCatExplorer(event, value);
                     return;
+                case CMD_MICRO_STATE_DERIVATIVE:
+                    handleDerivative(event, value);
+                    return;
                 default:
                     break;
             }
@@ -66,9 +75,14 @@ namespace syntheffect {
             switch(msg.getType()) {
                 case MIDI_TYPE_NOTE_ON:
                     switch (msg.getNote()) {
+                        case 18:
+                            return CMD_MICRO_LEFT_ONE;
+                        case 19:
+                            return CMD_MICRO_LEFT_TWO;
                         case 23:
                             return CMD_MICRO_LEFT_PLAY_PAUSE;
                         default:
+                            SDL_Log("Unknow NOTE_ON %d", msg.getNote());
                             return CMD_MICRO_UNKNOWN;
                     }
                 case MIDI_TYPE_CONTROL:
@@ -78,6 +92,7 @@ namespace syntheffect {
                         case 33:
                             return CMD_MICRO_RIGHT_TURN_TABLE_SPIN;
                         default:
+                            SDL_Log("Unknow CONTROL %d", msg.getNote());
                             return CMD_MICRO_UNKNOWN;
                     }
                 default:

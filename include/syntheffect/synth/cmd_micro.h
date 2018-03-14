@@ -33,6 +33,8 @@ namespace syntheffect {
 
             private:
                 void handleCatExplorer(CmdMicroEvent event, uint8_t value);
+                void handleDerivative(CmdMicroEvent event, uint8_t value);
+
                 CmdMicroEvent convertEvent(MidiMessage& msg);
 
                 CmdMicroState current_state_;
