@@ -11,11 +11,10 @@ namespace syntheffect {
             public:
                 Derivative();
                 void update(const cv::Mat& in, cv::Mat& out);
-                void setBlurSize(double param);
-                std::string stringify();
+                void setBlurSize(int size, int in_min, int in_max);
 
             private:
-                cv::Size blurSize;
+                cv::Size blur_size_;
         };
     }
 }

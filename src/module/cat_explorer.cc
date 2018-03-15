@@ -8,20 +8,20 @@ namespace syntheffect {
     namespace module {
         // Maybe more performant with videos with b-frames
         // https://github.com/opencv/opencv/issues/4890
-        CatExplorer::CatExplorer(cv::VideoCapture& vcap) {
-            weight_ = 0.5;
+        CatExplorer::CatExplorer(cv::VideoCapture& vcap, cv::Size target_size) {
+            double fps = vcap.get(cv::CAP_PROP_FPS);
+            ms_delay_ = int((1 / fps) * 1000);
+
             current_pos_frames_ = 0;
             vcap_ = vcap;
             last_seek_ = -1;
+            target_size_ = target_size;
+            cv::Mat last_frame_;
         }
 
-        void CatExplorer::setWeight(double param) {
-            weight_ = param;
-        }
-
-        void CatExplorer::seek(uint32_t step_frames) {
+        void CatExplorer::seek(int32_t step_frames) {
             uint32_t max_frames = vcap_.get(cv::CAP_PROP_FRAME_COUNT);
-            current_pos_frames_ = (current_pos_frames_ + step_frames) % (max_frames + 1);
+            current_pos_frames_ = (current_pos_frames_ + step_frames) % max_frames;
             last_seek_ = SDL_GetTicks();
         }
 
@@ -34,33 +34,44 @@ namespace syntheffect {
             return SDL_GetTicks() - last_seek_ < 200;
         }
 
-        void CatExplorer::update(const cv::Mat& in, cv::Mat& out) {
-            if (active_) {
-                cv::Mat frame;
-                vcap_ >> frame;
-                if (shouldSeek()) {
-                    vcap_.set(CV_CAP_PROP_POS_FRAMES, current_pos_frames_);
-                } else {
-                    current_pos_frames_++;
-                }
-
-                if (current_pos_frames_ > int(round(vcap_.get(cv::CAP_PROP_FRAME_COUNT)))) {
-                    current_pos_frames_ = 1;
-                }
-
-                cv::resize(frame, frame, in.size(), 0, 0, cv::INTER_CUBIC);
-                cv::addWeighted(in, (1 - weight_), frame, weight_, 0, out);
-            } else {
-                in.copyTo(out);
+        bool CatExplorer::isNextFrameReady() {
+            if (!active_) {
+                return false;
             }
+
+            unsigned int transpired = SDL_GetTicks() - last_update_;
+            if (transpired > ms_delay_) {
+                SDL_Log("transpired=%u, ms_delay_=%u", transpired, ms_delay_);
+            }
+
+            return last_update_ == 0 || transpired >= ms_delay_;
         }
 
-        void CatExplorer::fadeWeight(bool up) {
-            weight_ = fadeParam(weight_, up, 0.05);
-        }
+        void CatExplorer::read(cv::Mat& out) {
+            if (!active_) {
+                last_frame_.copyTo(out);
+                return;
+            }
 
-        std::string CatExplorer::stringify() {
-            return str(boost::format("CatExplorer: weight=%1%") % weight_);
+            last_update_ = SDL_GetTicks();
+
+            if (shouldSeek()) {
+                vcap_.set(CV_CAP_PROP_POS_FRAMES, current_pos_frames_);
+            }
+
+            if (!vcap_.read(out)) {
+                vcap_.set(CV_CAP_PROP_POS_FRAMES, 0);
+                if (!vcap_.read(out)) {
+                    SDL_Log("ERROR: For some reason the video can not be read on frame 0");
+                    // App may crash since out is empty.
+                    return;
+                }
+            }
+
+            cv::resize(out, out, target_size_, 0, 0, cv::INTER_CUBIC);
+            out.copyTo(last_frame_);
+
+            current_pos_frames_ = vcap_.get(CV_CAP_PROP_POS_FRAMES);
         }
     };
 };

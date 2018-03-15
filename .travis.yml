@@ -33,17 +33,19 @@ compiler:
   - gcc
   
 before_install:
-  # Download Opencv v3 archive and extract.
-  - curl https://codeload.github.com/opencv/opencv/tar.gz/3.4.1 -o opencv.tar.gz
-  - tar -xzf opencv.tar.gz --skip-old-files
-  - cd opencv-*
-  
+  # Get or update the opencv repo
+  - git clone https://github.com/opencv/opencv.git || (cd opencv ; git pull; cd ..)
+  - cd opencv
+
   # Create a new 'build' folder.
   - mkdir -p build
   - cd build
+
+  # Get or update the contrib modules
+  - git clone https://github.com/opencv/opencv_contrib.git || (cd opencv_contrib ; git pull; cd ..)
   
-  # Set build instructions for Ubuntu distro.
-  - cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -D WITH_TBB=ON -D BUILD_EXAMPLES=OFF -D BUILD_opencv_apps=OFF -DBUILD_DOCS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF ..
+  # Build
+  - cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -D WITH_TBB=ON -D BUILD_EXAMPLES=OFF -D BUILD_opencv_apps=OFF -DBUILD_DOCS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF -DOPENCV_EXTRA_MODULES_PATH=opencv_contrib/modules -D BUILD_opencv_freetype=OFF -D ENABLE_PRECOMPILED_HEADERS=OFF ..
   
   # Run 'make' with four threads.
   - make -j4

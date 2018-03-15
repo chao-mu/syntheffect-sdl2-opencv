@@ -3,6 +3,9 @@
 *.o.dSYM
 *.o
 
+# Editor swapping
+*.swp
+
 # Home for saved output during experimentation
 /art/*
 

@@ -10,6 +10,14 @@ At this point I am not expecting others to use it.
 ![Alt Text](http://www.capriogroup.com/WebStuff/Images/Borders/Animated-Border-Fire.gif)
 ## Installation
 
+This project dependds on opencv >= 3.4.1 built with the [contrib modules](https://github.com/opencv/opencv_contrib). This is left as an exercise left to the reader.
+
+You will also need SDL2 and RTMIDI. Maybe you can install that with the following:
+
+```
+$ sudo apt-get install -y librtmidi-dev libsdl2-dev libboost-all-dev
+```
+
 After installing dependencies (sdl2, opencv 3, and rtmidi):
 
 ```
@@ -18,16 +26,6 @@ $ ./configure
 $ make 
 $ make install
 ```
-
-### Dependencies on Ubuntu
-
-This project is developed and run on MacOS, but in setting up to work with Travis it had to also at least compile on Ubuntu:
-
-```
-$ sudo apt-get install -y librtmidi-dev libsdl2-dev libboost-all-dev
-```
-
-Installing opencv >= 3.4.1 is an exercise left to the reader.
 
 ![Alt Text](http://www.capriogroup.com/WebStuff/Images/Borders/Animated-Border-Fire.gif)
 ## Contributing

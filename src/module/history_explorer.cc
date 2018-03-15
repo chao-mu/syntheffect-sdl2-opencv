@@ -28,7 +28,7 @@ namespace syntheffect {
         }
 
         void HistoryExplorer::fadeHistoryWeight(bool up) {
-            history_weight_ = fadeParam(history_weight_, up, 0.05);
+            history_weight_ = fadeParam(history_weight_, up, 0.05, 0, 1);
         }
 
         void HistoryExplorer::start() {

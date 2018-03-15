@@ -10,10 +10,19 @@ namespace syntheffect {
         }
 
         void Tracker::update(const cv::Mat& in, cv::Mat& out) {
+            in.copyTo(out);
+
             if (!active_) {
-                in.copyTo(out);
                 return;
             }
+
+            // Define initial bounding box
+            cv::Rect2d roi = cv::selectROI(out, false);
+            if (roi.width==0 || roi.height==0) {
+                return;
+            }
+
+            cv::rectangle(out, roi, cv::Scalar(255, 0, 0), 2, 1);
         }
     };
 };

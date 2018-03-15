@@ -113,6 +113,9 @@ am_syntheffect_OBJECTS = src/syntheffect-main.$(OBJEXT) \
 	src/module/syntheffect-color_tweak.$(OBJEXT) \
 	src/module/syntheffect-writer.$(OBJEXT) \
 	src/module/syntheffect-module.$(OBJEXT) \
+	src/module/syntheffect-feedback.$(OBJEXT) \
+	src/module/syntheffect-tracker.$(OBJEXT) \
+	src/module/syntheffect-merger.$(OBJEXT) \
 	src/synth/syntheffect-cmd_micro.$(OBJEXT)
 syntheffect_OBJECTS = $(am_syntheffect_OBJECTS)
 syntheffect_LDADD = $(LDADD)
@@ -323,6 +326,9 @@ syntheffect_SOURCES = \
 		    src/module/color_tweak.cc \
 		    src/module/writer.cc \
 		    src/module/module.cc \
+		    src/module/feedback.cc \
+		    src/module/tracker.cc \
+		    src/module/merger.cc \
 		    src/synth/cmd_micro.cc
 
 syntheffect_CPPFLAGS = $(RTMIDI_CFLAGS) $(BOOST_CPPFLAGS) $(OPENCV_CFLAGS) $(SDL_CFLAGS) -I$(top_srcdir)/include
@@ -456,6 +462,12 @@ src/module/syntheffect-writer.$(OBJEXT): src/module/$(am__dirstamp) \
 	src/module/$(DEPDIR)/$(am__dirstamp)
 src/module/syntheffect-module.$(OBJEXT): src/module/$(am__dirstamp) \
 	src/module/$(DEPDIR)/$(am__dirstamp)
+src/module/syntheffect-feedback.$(OBJEXT): src/module/$(am__dirstamp) \
+	src/module/$(DEPDIR)/$(am__dirstamp)
+src/module/syntheffect-tracker.$(OBJEXT): src/module/$(am__dirstamp) \
+	src/module/$(DEPDIR)/$(am__dirstamp)
+src/module/syntheffect-merger.$(OBJEXT): src/module/$(am__dirstamp) \
+	src/module/$(DEPDIR)/$(am__dirstamp)
 src/synth/$(am__dirstamp):
 	@$(MKDIR_P) src/synth
 	@: > src/synth/$(am__dirstamp)
@@ -484,8 +496,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-cat_explorer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-color_tweak.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-derivative.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-feedback.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-history_explorer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-merger.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-module.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-tracker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/module/$(DEPDIR)/syntheffect-writer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/synth/$(DEPDIR)/syntheffect-cmd_micro.Po@am__quote@
 
@@ -630,6 +645,48 @@ src/module/syntheffect-module.obj: src/module/module.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/module.cc' object='src/module/syntheffect-module.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-module.obj `if test -f 'src/module/module.cc'; then $(CYGPATH_W) 'src/module/module.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/module.cc'; fi`
+
+src/module/syntheffect-feedback.o: src/module/feedback.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-feedback.o -MD -MP -MF src/module/$(DEPDIR)/syntheffect-feedback.Tpo -c -o src/module/syntheffect-feedback.o `test -f 'src/module/feedback.cc' || echo '$(srcdir)/'`src/module/feedback.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-feedback.Tpo src/module/$(DEPDIR)/syntheffect-feedback.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/feedback.cc' object='src/module/syntheffect-feedback.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-feedback.o `test -f 'src/module/feedback.cc' || echo '$(srcdir)/'`src/module/feedback.cc
+
+src/module/syntheffect-feedback.obj: src/module/feedback.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-feedback.obj -MD -MP -MF src/module/$(DEPDIR)/syntheffect-feedback.Tpo -c -o src/module/syntheffect-feedback.obj `if test -f 'src/module/feedback.cc'; then $(CYGPATH_W) 'src/module/feedback.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/feedback.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-feedback.Tpo src/module/$(DEPDIR)/syntheffect-feedback.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/feedback.cc' object='src/module/syntheffect-feedback.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-feedback.obj `if test -f 'src/module/feedback.cc'; then $(CYGPATH_W) 'src/module/feedback.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/feedback.cc'; fi`
+
+src/module/syntheffect-tracker.o: src/module/tracker.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-tracker.o -MD -MP -MF src/module/$(DEPDIR)/syntheffect-tracker.Tpo -c -o src/module/syntheffect-tracker.o `test -f 'src/module/tracker.cc' || echo '$(srcdir)/'`src/module/tracker.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-tracker.Tpo src/module/$(DEPDIR)/syntheffect-tracker.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/tracker.cc' object='src/module/syntheffect-tracker.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-tracker.o `test -f 'src/module/tracker.cc' || echo '$(srcdir)/'`src/module/tracker.cc
+
+src/module/syntheffect-tracker.obj: src/module/tracker.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-tracker.obj -MD -MP -MF src/module/$(DEPDIR)/syntheffect-tracker.Tpo -c -o src/module/syntheffect-tracker.obj `if test -f 'src/module/tracker.cc'; then $(CYGPATH_W) 'src/module/tracker.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/tracker.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-tracker.Tpo src/module/$(DEPDIR)/syntheffect-tracker.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/tracker.cc' object='src/module/syntheffect-tracker.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-tracker.obj `if test -f 'src/module/tracker.cc'; then $(CYGPATH_W) 'src/module/tracker.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/tracker.cc'; fi`
+
+src/module/syntheffect-merger.o: src/module/merger.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-merger.o -MD -MP -MF src/module/$(DEPDIR)/syntheffect-merger.Tpo -c -o src/module/syntheffect-merger.o `test -f 'src/module/merger.cc' || echo '$(srcdir)/'`src/module/merger.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-merger.Tpo src/module/$(DEPDIR)/syntheffect-merger.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/merger.cc' object='src/module/syntheffect-merger.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-merger.o `test -f 'src/module/merger.cc' || echo '$(srcdir)/'`src/module/merger.cc
+
+src/module/syntheffect-merger.obj: src/module/merger.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/module/syntheffect-merger.obj -MD -MP -MF src/module/$(DEPDIR)/syntheffect-merger.Tpo -c -o src/module/syntheffect-merger.obj `if test -f 'src/module/merger.cc'; then $(CYGPATH_W) 'src/module/merger.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/merger.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/module/$(DEPDIR)/syntheffect-merger.Tpo src/module/$(DEPDIR)/syntheffect-merger.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/module/merger.cc' object='src/module/syntheffect-merger.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/module/syntheffect-merger.obj `if test -f 'src/module/merger.cc'; then $(CYGPATH_W) 'src/module/merger.cc'; else $(CYGPATH_W) '$(srcdir)/src/module/merger.cc'; fi`
 
 src/synth/syntheffect-cmd_micro.o: src/synth/cmd_micro.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(syntheffect_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/synth/syntheffect-cmd_micro.o -MD -MP -MF src/synth/$(DEPDIR)/syntheffect-cmd_micro.Tpo -c -o src/synth/syntheffect-cmd_micro.o `test -f 'src/synth/cmd_micro.cc' || echo '$(srcdir)/'`src/synth/cmd_micro.cc

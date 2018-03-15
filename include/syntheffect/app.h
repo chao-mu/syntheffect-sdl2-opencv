@@ -38,18 +38,6 @@ namespace syntheffect {
             // Whether or not we should exit the main loop.
             bool stopped_;
 
-            // The video we're reading
-            cv::VideoCapture vcap_;
-
-            // The amount to wait between frames, at ideal maximum
-            unsigned int ms_delay_;
-
-            // The last time we drew a frame
-            unsigned int last_update_;
-
-            // Whether or not we should read the next frame.
-            bool isNextFrameReady();
-
             // snapshot takes a picture and writes it to an external file.
             void snapshot();
 

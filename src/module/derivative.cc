@@ -1,15 +1,19 @@
 #include "syntheffect/module/derivative.h"
 
+#include <SDL.h>
 #include <opencv2/opencv.hpp>
 #include <boost/format.hpp>
-
-#define MIN_BLUR_SIZE 0
-#define MAX_BLUR_SIZE 100
 
 namespace syntheffect {
     namespace module {
         Derivative::Derivative() {
-            blurSize = cv::Size(3, 3);
+            blur_size_ = cv::Size(3, 3);
+        }
+
+        void Derivative::setBlurSize(int size, int in_min, int in_max) {
+            size = remapParamOdd(size, 1, 200, in_min, in_max);
+            blur_size_.width = size;
+            blur_size_.height = size;
         }
 
         void Derivative::update(const cv::Mat& in, cv::Mat& out) {
@@ -19,7 +23,7 @@ namespace syntheffect {
             }
 
             cv::Mat color;
-            GaussianBlur(in, color, blurSize, 0);
+            cv::blur(in, color, blur_size_);
             cvtColor(color, out, cv::COLOR_BGR2GRAY);
 
             int ddepth = CV_16S;
@@ -38,17 +42,5 @@ namespace syntheffect {
 
             bitwise_and(color, out, out);
         }
-
-        void Derivative::setBlurSize(double factor) {
-            int width = remapParamOdd(factor, MIN_BLUR_SIZE, MAX_BLUR_SIZE);
-            blurSize = cv::Size(width, width);
-        }
-
-        std::string Derivative::stringify() {
-            return str(boost::format("Derivative: blurSize(%1%, %2%)") % blurSize.width % blurSize.height);
-        }
     };
 };
-
-#undef MIN_BLUR_SIZE
-#undef MAX_BLUR_SIZE
