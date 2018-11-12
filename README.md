@@ -1,3 +1,5 @@
+DEPRECATED! DEPRECATED! DEPRECATED! DEPRECATED! Replaced by https://syntheffect.com
+
 ![Alt Text](http://www.capriogroup.com/WebStuff/Images/Borders/Animated-Border-WelcomeOnClassyMarquee.gif)
 
 # Synth Effect
